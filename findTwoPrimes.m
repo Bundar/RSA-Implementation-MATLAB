@@ -1,6 +1,6 @@
 ## Author: Dunbar Birnie <dubar@manjarobar>
 ## Created: 2019-10-19
-
+#helper
 function twoPrimes = findTwoPrimes()
   i = 1;
   twoPrimes = [0, 0];

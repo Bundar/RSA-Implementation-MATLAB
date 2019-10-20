@@ -1,6 +1,7 @@
 ## Author: Dunbar Birnie <dubar@manjarobar>
 ## Created: 2019-10-19
 
+#helper
 function retval = myMillerRabin (n, k)
     if (n <= 2)
         retval = -1;
@@ -13,8 +14,6 @@ function retval = myMillerRabin (n, k)
         s = s + 1;
     endwhile
     assert((2**s)*d == n-1);
-    ##printf("Passed: %i = n-1\n",(2**s)*d);
-    ##printf("s = %i, d = %d n - 1 = 2^s * d\n", s, d);
     for i = 1:k
         a = 2 + floor(rand*(n-3));
         x = powerMod(a, d, n); 
