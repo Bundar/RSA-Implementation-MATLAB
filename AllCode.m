@@ -3,31 +3,33 @@
 
 function AllCode ()
   keys = getKeys();
-  plainText = input('What is the original plain text to be encrypted?\n')
-  publicKey = keys(1);
-  privateKey = keys(2);
+  plainText = input("What is the original plain text to be encrypted?\n", 's');
+  publicKey = keys(1, 1:2);
+  privateKey = keys(2, 1:2);
   cipherText = encryption(publicKey, plainText);
-  printf("The encrypted Message is: %s\n", char(cipherText))
-
-  select = input("Would you like to decrypt back? \n")
+  printf("The encrypted Message is: ");
+  for i = 1:length(cipherText)
+    printf("%i ", cipherText(i));
+  endfor
+  select = input("\nWould you like to decrypt back? \n", 's');
   if (select == 'yes')
     pt = decryption(privateKey, cipherText);
-    printf("The decrypted cipher text is: %s\n", char(pt))
+    printf("The decrypted cipher text is: %s\n", char(pt));
   endif
 endfunction
 
 ## Returns Public and Private Keys
 function keys = getKeys()
   pq = findTwoPrimes();
-  p = pq(1)
-  q = pq(2)
-  n = p*q
-  ed = computeEandD(p, q)
+  p = pq(1);
+  q = pq(2);
+  n = p*q;
+  ed = computeEandD(p, q);
   e = ed(1);
   d = ed(2);
   publicKey = [e, n];
   privateKey = [d, n];
-  keys = [publicKey, privateKey];
+  keys = [publicKey; privateKey];
 endfunction
 
 ## Encrypts the given plain text using the generated public key.
@@ -37,17 +39,17 @@ function cipherArr = encryption ( publicKey, plainText)
   n = publicKey(2);
   for i = 1:length(pt)
     m = pt(i);
-    cipherArr(i) = mod(m**e, n);
+    cipherArr(i) = powerMod(m, e, n);
   endfor
 endfunction
 
 ## Decrypts the given cipher text using the generated private key.
 function plainText = decryption ( privateKey, cipherArr)
   d = privateKey(1);
-  n = publicKey(2);
+  n = privateKey(2);
   for i = 1:length(cipherArr)
     m = cipherArr(i);
-    plainText(i) = mod(m**d, n);
+    plainText(i) = powerMod(m, d, n);
   endfor
 endfunction
 
@@ -72,7 +74,7 @@ function inv = extendedEuclidianAlgorithm(e, totient)
   [G, A, B] = gcd(totient, e);
   inv = totient + B;
   assert(mod(e*inv, totient) == 1);
-  printf("mod(e*inv, totient) == %i\n", mod(e*inv, totient));
+  #printf("mod(e*inv, totient) == %i\n", mod(e*inv, totient));
 endfunction
 
 ## Code to generate two random primes using miller rabin method.
