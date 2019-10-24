@@ -81,12 +81,12 @@ end
 %% Code to generate two random primes using miller rabin method.
 function twoPrimes = findTwoPrimes()
   i = 1;
-  %max = sqrt(realmax())-1;
-  max = prevprime(sqrt(realmax()));
+  %max = %prevprime(sqrt(realmax()));
+  max = 10000;
   twoPrimes = [0, 0];
   while(i < 3) 
     p = floor(rand()*max);
-    if(myMillerRabin(p, 6) == 1)
+    if(myMillerRabin(p, 20) == 1)
       %p is a prime
       twoPrimes(i) = p;
       i = i + 1;
@@ -110,24 +110,23 @@ function retval = myMillerRabin (n, k)
     for i = 1:k
         a = 2 + floor(rand*(n-3));
         x = powerMod(a, d, n); 
-        if(x == 1 || x == n-1)
-            retval = 1;
-            return;
-        end
-        while (d ~= n-1)
-            x = mod( x*x, n );
-            d = d * 2;
-            if(x == 1)
-              retval = 0;
-              return;
+        if(x ~= 1 && x ~= n-1)
+            while (d ~= n-1 && x ~= n-1)
+                x = mod( x*x, n );
+                d = d*2;
+                if(x == 1)
+                  retval = 0;
+                  return;
+                end
+
             end
-            if(x == n-1)
-              retval = 1;
-              return;
+            if(x ~= n-1)
+                  retval = 0;
+                  return;
             end
         end
     end
-    retval = 0;
+    retval = 1;
 end
 
 %% power mod function calculates powers of a base mod n so that it doesnt over flow the double precision.
@@ -143,4 +142,3 @@ function ret = powerMod(x, y, p)
     x = mod((x*x),p);
   end
 end
-
