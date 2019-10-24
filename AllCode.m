@@ -1,6 +1,6 @@
 %% Project CP 1 NetSec
-%% Dunbar B and Phillip J
-
+%% Dunbar B and Philip J
+%Driver Code for the encryption service.
 function AllCode ()
   keys = getKeys();
   plainText = input("What is the original plain text to be encrypted?\n", 's');
@@ -81,9 +81,11 @@ end
 %% Code to generate two random primes using miller rabin method.
 function twoPrimes = findTwoPrimes()
   i = 1;
+  %max = sqrt(realmax())-1;
+  max = prevprime(sqrt(realmax()));
   twoPrimes = [0, 0];
-  while(i < 3)
-    p = floor(rand()*10000);
+  while(i < 3) 
+    p = floor(rand()*max);
     if(myMillerRabin(p, 6) == 1)
       %p is a prime
       twoPrimes(i) = p;
